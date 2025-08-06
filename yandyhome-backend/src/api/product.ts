@@ -2,14 +2,13 @@ import express from 'express';
 import serverless from 'serverless-http';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import productRoutes from '.routes/product.routes'; // Adjust path if needed
-import { errorHandler } from './middleware/error.middleware';
+import productRoutes from '../routes/product.routes';
+import { errorHandler } from '../middleware/error.middleware';
 
 dotenv.config();
 
 const app = express();
 
-// CORS Config
 const allowedOrigins = (process.env.FRONTEND_URL || '').split(',').map(url => url.trim());
 
 app.use(cors({
@@ -26,14 +25,11 @@ app.use(cors({
 
 app.use(express.json());
 
-// Routes
 app.get('/', (_req, res) => {
     res.send('Yandy Home Furniture Backend is running on Vercel!');
 });
-app.use('/api/products', productRoutes);
 
-// Error handler
+app.use('/api/products', productRoutes);
 app.use(errorHandler);
 
-// ✅ Vercel wants default export
-export default serverless(app);
+export default serverless(app); // Vercel expects default export
