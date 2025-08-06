@@ -10,14 +10,20 @@ const app = express();
 
 // ✅ CORS Configuration
 // ✅ CORS Configuration
-const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:3000')
-    .split(',') // Comma එකෙන් වෙන් කර array එකක් ලෙස සාදයි
+const allowedOrigins = (process.env.FRONTEND_URL || '').split(',').map(url => url.trim());
 
 app.use(cors({
-    origin: allowedOrigins,
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 
 app.use(express.json());
 
