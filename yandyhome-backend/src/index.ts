@@ -9,9 +9,12 @@ dotenv.config();
 const app = express();
 
 // ✅ CORS Configuration
-const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:3000';
+// ✅ CORS Configuration
+const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:3000')
+    .split(',') // Comma එකෙන් වෙන් කර array එකක් ලෙස සාදයි
+
 app.use(cors({
-    origin: allowedOrigin,
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
